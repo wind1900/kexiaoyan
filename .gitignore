@@ -3,3 +3,4 @@ database
 *.pyc
 *.log
 *.pot
+*settings.py
