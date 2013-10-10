@@ -11,6 +11,8 @@ class Material(models.Model):
     category = models.ForeignKey(Category)
     def __unicode__(self):
         return u"#{0}# {1}".format(self.category, self.content)
+    class Meta:
+        ordering = ('-time',)
 
 class Event(models.Model):
     title = models.CharField(max_length=40)
