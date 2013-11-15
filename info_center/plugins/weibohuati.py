@@ -1,18 +1,37 @@
+# -*- coding: utf-8 -*-
+
 from django.template import Template, Context
+from utils import *
 import requests
 import re
 
+html = '''
+{% for link, name in huati %}
+<div class="cell text-right">
+<a href="{{ link }}" target="_blank">{{ name }}</a>
+</div>
+{% endfor %}
+<div class="cell text-right"><a href="{{ more }}" target="_blank">更多热门话题</a></div>
+'''
+
+more = "http://huati.weibo.com"
+
 def update():
-    s = __name__.rfind(".") + 1
-    filename = __name__[s:]+".html"
-    fp = open("info_center/plugins/" + filename)
-    template = Template(fp.read())
-    fp.close()
-    c = Context({})
-    c['huati'] = "abcde"
-    session = requests.Session()
-    session = requests.get('http://huati.weibo.com')
-    rdata = session = requests.get('http://huati.weibo.com/aj_topiclist/small?_pv=1&ctg1=99&ctg2=0&prov=0&sort=time&p=1&t=1')
-    element = r'<div class="hd"'
-    return rdata
-#    return template.render(c)
+    filename = get_filename(__name__)
+    if need_update(filename):
+        template = Template(html)
+        c = Context({'more': more})
+        request = requests.get("http://huati.weibo.cn")
+        content = request.content
+        pattern = re.compile(ur'<a href="([\w:/?=.]+)" class="k">(#[\w,，+“”、\-——《》<>!]+#)</a>', re.UNICODE)
+        match = pattern.findall(request.content.decode('utf8'))
+        c['huati'] = match[:10]
+        content = template.render(c)
+        f = open(filename, 'w')
+        f.write(content.encode('utf8'))
+        f.close()
+    else:
+        f = open(filename)
+        content = f.read()
+        f.close()
+    return content

@@ -28,6 +28,7 @@ def verify(request):
 def main(request):
     if not verify(request):
         raise Http404
+##    return HttpResponse(request.GET.get('echostr'))
     msg_root = ET.fromstring(request.body)
     msg = {}
     for child in msg_root:
