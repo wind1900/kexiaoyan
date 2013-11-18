@@ -5,3 +5,4 @@ wx.py
 *.log
 *.pot
 *settings.py
+*.tmp

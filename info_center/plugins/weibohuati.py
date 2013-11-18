@@ -11,7 +11,7 @@ html = '''
 <a href="{{ link }}" target="_blank">{{ name }}</a>
 </div>
 {% endfor %}
-<div class="cell text-right"><a href="{{ more }}" target="_blank">更多热门话题</a></div>
+<div class="cell text-right"><a href="{{ more }}" target="_blank">更多热门话题&gt;&gt;</a></div>
 '''
 
 more = "http://huati.weibo.com"

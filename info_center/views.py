@@ -8,13 +8,15 @@ def index(request):
     material_list = models.Material.objects.all()
     context = RequestContext(request,
                              {'title':'hello~',
-                              'material_list':material_list})
+                              'material_list':material_list,
+                              'active_navbar':'index'})
     return HttpResponse(template.render(context))
 
 def fetion(request):
     template = loader.get_template('fetion.html')
     context = RequestContext(request,
-                             {'title':'fetion'})
+                             {'title':'fetion',
+                              'active_navbar':'fetion'})
     return HttpResponse(template.render(context))
 
 def update(request, source):

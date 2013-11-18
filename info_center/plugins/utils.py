@@ -14,5 +14,5 @@ def need_update(filename):
     
 def get_filename(name):
     s = name.rfind(".") + 1
-    filename = "info_center/plugins/" + name[s:]
+    filename = "info_center/plugins/" + name[s:] + ".tmp"
     return filename

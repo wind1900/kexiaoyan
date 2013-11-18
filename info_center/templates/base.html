@@ -12,8 +12,8 @@
     <div class="navbar navbar-static-top navbar-inverse">
       <div class="navbar-inner">
 	<ul class="nav">
-	  <li class="active"><a href="index">首页</a></li>
-	  <li><a href="fetion">飞信</a></li>
+	  <li id="index"><a href="index">首页</a></li>
+	  <li id="fetion"><a href="fetion">飞信</a></li>
 	</ul>
       </div>
     </div>
@@ -21,16 +21,19 @@
       <div class="container">
 	<div class="sep20"></div>
 	<div class="row">
-	  <div class="span8 panel">
+	  <div class="span8">
 	    {% block left %}{% endblock %}
 	  </div>
-	  <div class="span4 panel">
+	  <div class="span4">
 	    {% block right %}{% endblock %}
 	  </div>
 	</div>
 	<div class="sep20"></div>
       </div>
     </div>
+    <script>
+      active_navbar = "{{active_navbar}}"
+    </script>
     <script src="{% static 'js/jquery.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
