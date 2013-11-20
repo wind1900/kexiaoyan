@@ -50,3 +50,7 @@ a:hover {
     background-repeat: repeat-x;
     border-bottom: 1px solid #e2e2e2;
 }
+
+.padding {
+    padding: 5px 0px 5px 10px
+}

@@ -1,6 +1,58 @@
 {% extends "base.html" %}
 
 {% block left %}
+<div class="panel padding">
+  {% if future %}
+  <h3>将来</h3>
+  <ul>
+    {% for event in future %}
+    <li>
+      {{ event.date|date:"n-d" }} {{ event.title }}
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  
+  {% if tomorrow or tomorrow_memdays %}
+  <h3>明天</h3>
+  <ul>
+    {% if tomorrow_memdays %}
+    <li>{{ tomorrow_memdays }}</li>
+    {% endif %}
+    {% for event in tomorrow %}
+    <li>
+      {{ event.title }}
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% if now or now_memdays %}
+  <h3>今天</h3>
+  <ul>
+    {% if now_memdays %}
+    <li>{{ now_memdays }}</li>
+    {% endif %}
+    {% for event in now %}
+    <li>
+      {{ event.title }}
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% if past %}
+  <h3>过去</h3>
+  <ul>
+    {% for event in past %}
+    <li>
+      {{ event.date|date:"n-d" }} {{ event.title }}
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  
+</div>
 {% endblock %}
 
 {% block right %}
