@@ -8,4 +8,5 @@ urlpatterns = patterns(
     url(r'^index$', views.index, name='index'),
     url(r'^fetion$', views.fetion, name='fetion'),
     url(r'^update/(?P<source>\w+)', views.update, ),
+    url(r'^submit_fetion$', views.submit_fetion),
 )

@@ -5,6 +5,7 @@ from django.template import RequestContext, loader
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from django.template import Template, Context
+from django.views.decorators.csrf import csrf_exempt
 import plugins.weather
 import importlib
 import models
@@ -99,6 +100,18 @@ def fetion(request):
                               'fetionb2':fetionb2,
                               'fetion':fetion_today,})
     return HttpResponse(template.render(context))
+
+@csrf_exempt
+def submit_fetion(request):
+    content = request.POST['content']
+    date = datetime.date.today()
+    try:
+        fetion = models.FetionText.objects.get(date = date)
+    except ObjectDoesNotExist:
+        fetion = models.FetionText(date=date)
+    fetion.content = content
+    fetion.save()
+    return HttpResponse('ok')
 
 def update(request, source):
     try:

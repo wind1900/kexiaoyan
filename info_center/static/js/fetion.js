@@ -27,5 +27,7 @@ $(document).ready(function() {
 
 function submit() {
     text = document.getElementById('fetiontext');
-    return text.value.trim() + "\n"
+    text = text.value.trim() + "\n"
+    $.post("submit_fetion", {content:text});
+    return text
 }
