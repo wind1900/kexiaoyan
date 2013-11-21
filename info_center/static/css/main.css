@@ -12,6 +12,15 @@ a:hover {
     text-decoration: underline
 }
 
+a.attach:link {
+    color: #f00;
+    text-decoration: none
+}
+
+a.attach:hover {
+    text-decoration: underline
+}
+
 .sep20 {
     height: 20px
 }
@@ -53,4 +62,18 @@ a:hover {
 
 .padding {
     padding: 5px 0px 5px 10px
+}
+
+.padding1 {
+    padding: 5px 4px 5px 0px
+}
+
+#fetiontext {
+    resize:none;
+    overflow-y:hidden;
+    width: 100%;
+    border: 1px solid #d7d7d7;
+    border-radius: 1px;
+    padding: 0px;
+    color: #333
 }

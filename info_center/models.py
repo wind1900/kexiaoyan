@@ -18,7 +18,7 @@ class Material(models.Model):
 
 class Event(models.Model):
     title = models.CharField(max_length=40)
-    content = models.TextField()
+    content = models.TextField(blank=True)
     date = models.DateField()
     attach = models.CharField(max_length=30, blank=True)
     # event important level
@@ -26,6 +26,14 @@ class Event(models.Model):
     level = models.IntegerField()
     def __unicode__(self):
         return u"{0} {1}".format(self.title, self.date)
+    class Meta:
+        ordering = ('-date',)
+
+class FetionText(models.Model):
+    content = models.TextField()
+    date = models.DateField()
+    def __unicode__(self):
+        return str(self.date)
     class Meta:
         ordering = ('-date',)
 

@@ -29,7 +29,7 @@ def update():
         notices = pattern.findall(content)
         parser = HTMLParser.HTMLParser()
         match = []
-        for notice in notices[:10]:
+        for notice in notices[-10:]:
             s = notice.find('datetime"')
             e = notice.find('</td>', s)
             date = notice[s+10:e]
