@@ -5,8 +5,11 @@ from django.views.decorators.csrf import csrf_exempt
 import hashlib
 import time
 import simimi
+import lottery
 import xml.etree.ElementTree as ET
 import wx
+
+modules = (lottery, simimi)
 
 def verify(request):
     signature = request.GET.get('signature')
@@ -37,10 +40,14 @@ def main(request):
     reply_msg['touser'] = msg['FromUserName']
     reply_msg['fromuser'] = msg['ToUserName']
     reply_msg['createtime'] = str(int(time.time()))
-    reply_msg['content'] = simimi.handle(msg['Content'])
+    reply_msg['content'] = u'~O(∩_∩)O~'
+    for m in modules:
+        s = m.handle(msg)
+        if s:
+            reply_msg['content'] = s
+            break
     if msg['MsgType'] == 'text':
         return HttpResponse(reply_text.format(**reply_msg))
-
     return HttpResponse("hello world")
 
 reply_text = u'''<xml>

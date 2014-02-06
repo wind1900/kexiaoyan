@@ -17,6 +17,10 @@ a.attach:link {
     text-decoration: none
 }
 
+a.attach:visited {
+    color: #f00;
+}
+
 a.attach:hover {
     text-decoration: underline
 }

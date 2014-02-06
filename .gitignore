@@ -6,3 +6,4 @@ wx.py
 *.pot
 *settings.py
 *.tmp
+*.csv

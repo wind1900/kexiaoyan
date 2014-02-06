@@ -10,7 +10,7 @@
     <li>
       {{ event.date|date:"n-d" }} {{ event.title }}
       {% if event.attach %}
-      <a href="{{ event.attach }}" target="_blank" class="attach">附件</a>
+      <a href="{{ event.attach }}" target="_blank" class="attach">详细</a>
       {% endif %}
     </li>
     {% endfor %}
@@ -27,7 +27,7 @@
     <li>
       {{ event.title }}
       {% if event.attach %}
-      <a href="{{ event.attach }}" target="_blank" class="attach">附件</a>
+      <a href="{{ event.attach }}" target="_blank" class="attach">详细</a>
       {% endif %}
     </li>
     {% endfor %}
@@ -44,7 +44,7 @@
     <li>
       {{ event.title }}
       {% if event.attach %}
-      <a href="{{ event.attach }}" target="_blank" class="attach">附件</a>
+      <a href="{{ event.attach }}" target="_blank" class="attach">详细</a>
       {% endif %}
     </li>
     {% endfor %}
@@ -58,7 +58,7 @@
     <li>
       {{ event.date|date:"n-d" }} {{ event.title }}
       {% if event.attach %}
-      <a href="{{ event.attach }}" target="_blank" class="attach">附件</a>
+      <a href="{{ event.attach }}" target="_blank" class="attach">详细</a>
       {% endif %}
     </li>
     {% endfor %}
@@ -82,11 +82,25 @@
 {% endblock %}
 
 {% block right %}
-<div class="update panel" source="ustcnews"></div>
-<div class="sep20"></div>
-<div class="update panel" source="ustcnotice"></div>
-<div class="sep20"></div>
-<div class="update panel" source="bbsnotice"></div>
+<div class="row">
+  <div class="span3">
+    <div class="update panel" source="ustcnews"></div>
+    <div class="sep20"></div>
+    <div class="update panel" source="ustcnotice"></div>
+    <div class="sep20"></div>
+    <div class="update panel" source="bbsnotice"></div>
+  </div>
+  <div class="span3">
+    <div class="update panel" source="gunews"></div>
+    <div class="sep20"></div>
+    <div class="update panel" source="youngnews"></div>
+  </div>
+</div>
+{% endblock %}
+
+{% block css %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'css/bootstrap-responsive.min.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block js %}

@@ -11,6 +11,7 @@ import importlib
 import models
 import datetime
 import lunardate
+import random
 
 fetion_template = '''小研播报：
 【天气】{{weather}}
@@ -20,7 +21,7 @@ fetion_template = '''小研播报：
 【征集\招募】
 【预告】
 {{birthday}}(小研心情)
-今天的科小研播报就到这里，我们明天再会~(@^_^@)~
+今天的科小研播报就到这里，我们明天再会{{emotion}}
 '''
 
 def index(request):
@@ -29,7 +30,8 @@ def index(request):
     context = RequestContext(request,
                              {'title':'hello~',
                               'material_list':material_list,
-                              'active_navbar':'index'})
+                              'active_navbar':'index',
+                              'span': (8, 4)})
     return HttpResponse(template.render(context))
 
 def fetion(request):
@@ -48,8 +50,8 @@ def fetion(request):
     lunar_today = lunardate.LunarDate.fromSolarDate(today.year, today.month, today.day)
     lunar_todaya1 = lunardate.LunarDate.fromSolarDate(todaya1.year, todaya1.month, todaya1.day)
 
-    mthn = 100 * (today.day//7 + 1) + today.weekday() + 1
-    mthn1 = 100 * (todaya1.day//7 + 1) + todaya1.weekday() + 1
+    mthn = 100 * ((today.day-1)//7 + 1) + today.weekday() + 1
+    mthn1 = 100 * ((todaya1.day-1)//7 + 1) + todaya1.weekday() + 1
     memdays = models.Memday.objects.filter(Q(month=today.month, day = today.day, lunar = False) | Q(month = lunar_today.month, day = lunar_today.day, lunar = True) | Q(month = today.month, day = mthn, lunar = False))
     tomorrow_memdays = models.Memday.objects.filter(Q(month=todaya1.month, day = todaya1.day, lunar = False) | Q(month = lunar_todaya1.month, day = lunar_todaya1.day, lunar=True) | Q(month = today.month, day = mthn1, lunar = False))
     memdays = " ".join(e.name for e in memdays)
@@ -58,38 +60,48 @@ def fetion(request):
     try:
         fetionb1 = models.FetionText.objects.get(date = todayb1)
     except ObjectDoesNotExist:
-        fetionb1 = "无数据"
+        fetionb1 = models.FetionText(content="无")
     try:
         fetionb2 = models.FetionText.objects.get(date = todayb2)
     except ObjectDoesNotExist:
-        fetionb2 = "无数据"
+        fetionb2 = models.FetionText(content="无")
+    try:
+        fetion = models.FetionText.objects.get(date = today)
+    except ObjectDoesNotExist:
+        fetion = None
 
-    weather = plugins.weather.update()
-    birthday = []
-    today_birthday = models.Birthday.objects.filter(
-        Q(month=today.month, day=today.day, lunar=False) | 
-        Q(month=lunar_today.month, day=lunar_today.day, 
-          lunar=True))
-    tomorrow_birthday = models.Birthday.objects.filter(
-        Q(month=todaya1.month, day=todaya1.day, lunar=False) | 
-        Q(month=lunar_todaya1.month,
-          day=lunar_todaya1.day, lunar=True))
-    if today_birthday:
-        tbtext = u', '.join(b.name + '(' + b.phone + ')' for b in today_birthday)
-        birthday.append(u'今天是' + tbtext + u'的生日')
-    if tomorrow_birthday:
-        tbtext = u', '.join(b.name + '(' + b.phone + ')' for b in tomorrow_birthday)
-        birthday.append(u'明天是' + tbtext + u'的生日')
-    birthday = u'，'.join(birthday)
-    if birthday:
-        birthday = u'【生日】' + birthday + u'，大家快去送上祝福吧~\n'
-    fetion_today = Template(fetion_template).render(
-        Context({'weather':weather,
-                 'birthday':birthday}))
+    if fetion and len(fetion.content) > 20:
+        fetion_today = fetion.content
+    else:
+        weather = plugins.weather.update()
+        birthday = []
+        emotion = ('~(@^_^@)~', '~~o(^_^)o~~', '~O(∩_∩)O~', '~\(≧▽≦)/~', '~(*^__^*)~')
+        today_birthday = models.Birthday.objects.filter(
+            Q(month=today.month, day=today.day, lunar=False) | 
+            Q(month=lunar_today.month, day=lunar_today.day, 
+              lunar=True))
+        tomorrow_birthday = models.Birthday.objects.filter(
+            Q(month=todaya1.month, day=todaya1.day, lunar=False) | 
+            Q(month=lunar_todaya1.month,
+              day=lunar_todaya1.day, lunar=True))
+        if today_birthday:
+            tbtext = u', '.join(b.name + '(' + b.phone + ')' for b in today_birthday)
+            birthday.append(u'今天是' + tbtext + u'的生日')
+        if tomorrow_birthday:
+            tbtext = u', '.join(b.name + '(' + b.phone + ')' for b in tomorrow_birthday)
+            birthday.append(u'明天是' + tbtext + u'的生日')
+        birthday = u'，'.join(birthday)
+        if birthday:
+            birthday = u'【生日】' + birthday + u'，大家快去送上祝福吧~\n'
+        fetion_today = Template(fetion_template).render(
+            Context({'weather':weather,
+                     'birthday':birthday,
+                     'emotion':random.choice(emotion)}))
     template = loader.get_template('fetion.html')
     context = RequestContext(request,
                              {'title':'fetion',
                               'active_navbar':'fetion',
+                              'span' : (6, 6),
                               'future':future,
                               'tomorrow':tomorrow,
                               'now':now,

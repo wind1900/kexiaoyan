@@ -6,7 +6,7 @@ import random
 class SimSimi:
 
     def __init__(self):
-        self.chat_url = 'http://www.simsimi.com/func/req?lc=ch&msg=%s'
+        self.chat_url = 'http://www.simsimi.com/func/req?lc=ch&ft=1.0&msg=%s'
 
     def getSimSimiResult(self, message):
         session = requests.Session()
@@ -19,7 +19,7 @@ class SimSimi:
         session.headers.update({'Content-Type': 'application/json; charset=utf-8'})
         session.get('http://www.simsimi.com/talk.htm')
         session.headers.update({'Referer': 'http://www.simsimi.com/talk.htm'})
-        session.get('http://www.simsimi.com/talk.htm?lc=ch', cookies = {'sagree':'true'})
+        session.get('http://www.simsimi.com/talk.htm?lc=ch')##, cookies = {'sagree':'true'})
         session.headers.update({'Referer': 'http://www.simsimi.com/talk.htm?lc=ch'})
         r = session.get(self.chat_url % message)
         return r.json()
@@ -29,16 +29,16 @@ class SimSimi:
             r = self.getSimSimiResult(message)
             try:
                 answer = r['response'] # unicode(r['response'], 'utf-8')
-                return answer # .encode('utf-8')
+                return answer  #.encode('utf-8')
             except:
                 return random.choice(['呵呵', '。。。', '= =', '=。='])
         else:
-            return '叫我干嘛'
+            return random.choice(['呵呵', '。。。', '= =', '=。='])
 
 simsimi = SimSimi()
 
-def handle(data):
-    return simsimi.chat(data)
+def handle(msg):
+    return simsimi.chat(msg['Content'])
 
 if __name__ == '__main__':
     print handle('hello')

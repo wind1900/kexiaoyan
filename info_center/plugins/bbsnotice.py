@@ -24,7 +24,7 @@ def update():
         template = Template(html)
         c = Context({'more' : more})
         request = requests.get(more)
-        content = request.content.decode('gb2312')
+        content = request.content.decode('gbk')
         pattern = re.compile(ur'<tr class="new">.+?</tr>', re.U | re.S)
         notices = pattern.findall(content)
         parser = HTMLParser.HTMLParser()
