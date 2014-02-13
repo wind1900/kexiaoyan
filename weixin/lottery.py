@@ -36,7 +36,11 @@ def getResult(count, seconds = 3600):
     r = random.sample(cand, count)
     f.close()
     f = open('weixin/lottery.html', 'w')
+    f.write('<html>')
+    f.write('<head><meta http-equiv="content-type" content="text/html; charset=UTF-8"/></head>\n')
+    f.write('<body>\n')
     f.writelines(r)
+    f.write('</body></html>')
     f.close()
 
 def upload():
