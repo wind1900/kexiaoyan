@@ -3,6 +3,7 @@ import datetime
 import random
 import ftplib
 import wx
+import os
 
 def handle(msg):
     if msg['Content'][:2] == u'加入':
@@ -15,26 +16,28 @@ def handle(msg):
     return None
 
 def addUser(name, userid):
-    f = open("weixin/lottery", "a")
-    time_str = datetime.datetime.now().strftime('%Y-%m-%d--%H:%M:%S')
-    f.write((userid + " " + time_str + " " + name + "\n").encode('utf8'))
+    f = open("weixin/lottery/" + userid, "w")
+    f.write(name.encode('utf8'))
+    f.write('\n')
     f.close()
 
-def getResult(count, seconds = 3600):
-    f = open("weixin/lottery", "r")
+def getResult(count, seconds = 900):
     now = datetime.datetime.now()
     cand = []
-    idset = set()
-    for line in f:
-        l = line.split()
-        time = datetime.datetime.strptime(l[1], '%Y-%m-%d--%H:%M:%S')
-        if (now - time).total_seconds() < seconds and l[0] not in idset:
-            cand.append(l[2])
-            idset.add(l[0])
+    for filename in os.listdir("weixin/lottery"):
+        filename = "weixin/lottery/" + filename
+        try:
+            modify_time = datetime.datetime.fromtimestamp(os.path.getmtime(filename))
+        except:
+            continue
+        if (now - modify_time).total_seconds() < seconds:
+            f = open(filename)
+            cand.append(f.readline().rstrip())
+            f.close()
+
     if (len(cand) < count):
         count = len(cand)
     r = random.sample(cand, count)
-    f.close()
     f = open('weixin/lottery.html', 'w')
     f.write('<html>')
     f.write('<head><meta http-equiv="content-type" content="text/html; charset=UTF-8"/></head>\n')
