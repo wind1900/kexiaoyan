@@ -16,7 +16,7 @@ def handle(msg):
     return None
 
 def addUser(name, userid):
-    f = open("weixin/lottery/" + userid, "w")
+    f = open(os.path.join(os.path.dirname(__file__), "lottery/" + userid), "w")
     f.write(name.encode('utf8'))
     f.write('\n')
     f.close()
@@ -24,8 +24,9 @@ def addUser(name, userid):
 def getResult(count, seconds = 900):
     now = datetime.datetime.now()
     cand = []
-    for filename in os.listdir("weixin/lottery"):
-        filename = "weixin/lottery/" + filename
+    d = os.path.dirname(__file__)
+    for filename in os.listdir(os.path.join(d, 'lottery')):
+        filename = os.path.join(d, "lottery/" + filename)
         try:
             modify_time = datetime.datetime.fromtimestamp(os.path.getmtime(filename))
         except:
@@ -38,7 +39,7 @@ def getResult(count, seconds = 900):
     if (len(cand) < count):
         count = len(cand)
     r = random.sample(cand, count)
-    f = open('weixin/lottery.html', 'w')
+    f = open(os.path.join(os.path.dirname(__file__), 'lottery/lottery.html'), 'w')
     f.write('<html>')
     f.write('<head><meta http-equiv="content-type" content="text/html; charset=UTF-8"/></head>\n')
     f.write('<body>\n')
@@ -51,5 +52,5 @@ def upload():
     ftp.connect('home.ustc.edu.cn', '21')
     ftp.login(wx.ftp_name, wx.ftp_password)
     ftp.cwd('public_html')
-    ftp.storbinary('STOR lottery.html', open('weixin/lottery.html'))
+    ftp.storbinary('STOR lottery.html', open(os.path.join(os.path.dirname(__file__), 'lottery/lottery.html')))
     ftp.close()
